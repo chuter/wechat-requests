@@ -1,0 +1,5 @@
+include LICENSE
+include *.txt *.rst *.ini
+include *.lock
+include Pipfile
+graft src
