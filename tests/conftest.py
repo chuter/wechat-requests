@@ -42,34 +42,43 @@ def httpbin_secure(httpbin_secure):
     return prepare_url(httpbin_secure)
 
 
+class FakeResponse(object):
+    fake_status_code = 200
+    fake_text = u''
+
+    def __init__(self, status_code=None, text=None):
+        self.status_code = status_code or self.fake_status_code
+        self._text = text or self.fake_text
+
+    @property
+    def request(self):
+        return None
+
+    @property
+    def text(self):
+        return self._text
+
+    def json(self, **kwargs):
+        try:
+            return json.loads(self.text)
+        except:  # noqa: E722
+            raise ValueError()
+
+
 @pytest.fixture(scope='class')
 def response_builder(request):
-    class FakeResponse(object):
-        fake_status_code = 200
-        fake_text = u''
-
-        def __init__(self, status_code=None, text=None):
-            self.status_code = status_code or self.fake_status_code
-            self._text = text or self.fake_text
-
-        @property
-        def request(self):
-            return None
-
-        @property
-        def text(self):
-            return self._text
-
-        def json(self, **kwargs):
-            try:
-                return json.loads(self.text)
-            except:  # noqa: E722
-                raise ValueError()
-
     def builder(cls, status_code=None, text=None):
         return FakeResponse(status_code, text)
 
     request.cls.response = builder
+
+
+@pytest.fixture(scope='session', autouse=True)
+def fake_response():
+    def builder(status_code=None, text=None):
+        return FakeResponse(status_code, text)
+
+    return builder
 
 
 @pytest.fixture(scope='session')

@@ -37,6 +37,8 @@ def _build_retry_session(session=None):
 
 class Api(object):
 
+    IMMUTABLE_FIELDS = frozenset(['_session'])
+
     API_BASE_URL = u'https://api.weixin.qq.com/cgi-bin'
 
     def __init__(self, root_path=u'/', headers=DEFAULT_HEADERS,
@@ -44,9 +46,15 @@ class Api(object):
         self._base_url = self.API_BASE_URL + u''
         self._base_url = self._prepare_api_url(root_path)
         self._timeout = timeout
-        self._session = _build_retry_session()
 
+        object.__setattr__(self, '_session', _build_retry_session())
         self._init_session(headers)
+
+    def __setattr__(self, key, value):
+        if key in self.IMMUTABLE_FIELDS:
+            raise AttributeError('{} can not be set'.format(key))
+
+        object.__setattr__(self, key, value)
 
     def request(self, method, api_path, params_dict=None, **kwargs):
         """

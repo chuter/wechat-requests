@@ -9,6 +9,8 @@ __all__ = ['get_mp_access_token']
 
 class OuthApi(Api):
 
+    IMMUTABLE_FIELDS = frozenset(['_appid', '_secret'])
+
     def __init__(self, appid, secret, **kwargs):
         if appid is None or secret is None:
             raise ValueError('appid or secret')
@@ -31,12 +33,6 @@ class OuthApi(Api):
             return
 
         return self._execute_request(method, url, params_dict, **kwargs)
-
-    def __setattr__(self, key, value):
-        if key in ('_appid', '_secret'):
-            raise AttributeError()
-
-        object.__setattr__(self, key, value)
 
 
 def get_mp_access_token(appid, secret, **kwargs):

@@ -14,6 +14,8 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
+    'six',
+    'certifi',
     'requests>=2.18.4',
     'lxml',
     'bs4'
@@ -75,7 +77,7 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
     keywords=[
-        'wechat', 'weixin', 'wxpay', 'api', 'apiclient'
+        'wechat', 'weixin', 'wxpay', 'api', 'apiclient', 'requests'
     ],
     tests_require=TEST_REQUIREMENTS,
     setup_requires=['pytest-runner'],

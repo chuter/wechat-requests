@@ -23,9 +23,13 @@ if is_py2:
     if JSONDecodeError is None:
         JSONDecodeError = ValueError
 
+    range = xrange
+
 elif is_py3:
     if JSONDecodeError is None:
         JSONDecodeError = json.decoder.JSONDecodeError
+
+    range = range
 
 
 from requests.compat import bytes, str # noqa
