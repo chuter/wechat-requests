@@ -3,6 +3,7 @@ Wechat Requests
 
 **To make it easier to requests Wechat/Weixin API(mp, pay, etc.)**
 
+both for py3 and py2, test coverage >90%
 
 Usage
 -------------------------
