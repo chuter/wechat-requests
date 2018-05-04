@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
+# flake8: noqa
+
 import sys
 
 _ver = sys.version_info
 
-#: Python 2.x?
 is_py2 = (_ver[0] == 2)
-
-#: Python 3.x?
 is_py3 = (_ver[0] == 3)
+
 
 try:
     import simplejson as json
@@ -24,12 +24,14 @@ if is_py2:
         JSONDecodeError = ValueError
 
     range = xrange
+    unicode = unicode
 
 elif is_py3:
     if JSONDecodeError is None:
         JSONDecodeError = json.decoder.JSONDecodeError
 
     range = range
+    unicode = str
 
 
-from requests.compat import bytes, str # noqa
+from requests.compat import bytes, str

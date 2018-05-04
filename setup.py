@@ -3,6 +3,7 @@
 
 import io
 import os
+import sys
 
 from setuptools import find_packages, setup
 
@@ -14,8 +15,6 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'six',
-    'certifi',
     'requests>=2.18.4',
     'lxml',
     'bs4'
@@ -32,6 +31,10 @@ TEST_REQUIREMENTS = [
 here = os.path.abspath(os.path.dirname(__file__))
 src = os.path.join(here, 'src')
 
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist bdist_wheel')
+    os.system('twine upload dist/*')
+    sys.exit()
 
 with io.open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = '\n' + f.read()

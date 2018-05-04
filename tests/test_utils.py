@@ -15,7 +15,7 @@ class TestXmlSerialize:
         xml_text = utils.serialize_dict_to_xml(
             number=2,
             bool=False,
-            bytes=bytes('bytes')
+            bytes=u'bytes'.encode('utf-8')
         )
 
         assert u'  <number>2</number>' in xml_text

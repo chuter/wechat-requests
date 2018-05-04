@@ -3,7 +3,7 @@
 
 from six import iteritems
 
-from .compat import json, str
+from .compat import json, str, bytes
 from .__version__ import __version__, __name__
 
 
@@ -58,7 +58,13 @@ class KVNode(Node):
             _value_str = json.dumps(value, ensure_ascii=False)
             self._pretty_value = u'<![CDATA[{}]]>'.format(_value_str)
         else:
-            self._pretty_value = str(value)
+            if not isinstance(value, bytes):
+                self._pretty_value = str(value)
+            else:
+                self._pretty_value = value
+
+            if type(self._pretty_value) is bytes:
+                self._pretty_value = self._pretty_value.decode('utf-8')
 
     def prettify(self):
         return u'<{key}>{value}</{key}>'.format(

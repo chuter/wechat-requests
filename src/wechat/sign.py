@@ -8,7 +8,7 @@ import string
 import hashlib
 
 from . import settings
-from .compat import str, range
+from .compat import str, range, unicode
 
 
 __all__ = ['random_nonce_str', 'sign_for_pay']
@@ -26,8 +26,7 @@ def random_nonce_str(length):
 
 
 def _build_sign_str(sign_key, **kwargs):
-    keys = kwargs.keys()
-    keys.sort()
+    keys = sorted(kwargs.keys())
 
     _sign_str_parts = []
     for key in keys:
@@ -62,6 +61,9 @@ def sign_for_pay(sign_key, **kwargs):
     if sign_type == 'MD5':
         return hashlib.md5(sign_bytes).hexdigest().upper()
     else:
+        if type(sign_key) is unicode:
+            sign_key = sign_key.encode('utf-8')
+
         return hmac.new(
             sign_key,
             msg=sign_bytes,

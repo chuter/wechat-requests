@@ -1,12 +1,25 @@
 [[source]]
-url = "https://pypi.python.org/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
 [packages]
 requests = "*"
+lxml = "*"
+"bs4" = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pytest-xdist = "*"
+httpbin = "==0.5.0"
+pytest-httpbin = "==0.0.7"
+"flake8" = "*"
+tox = "*"
+detox = "*"
+readme-renderer = "*"
+codecov = "*"
 
 [requires]
 python_version = "3.6"
