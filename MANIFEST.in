@@ -1,5 +1,6 @@
 include LICENSE
-include *.txt *.rst *.ini
+include *.txt *.rst *.ini .coveragerc Makefile
 include *.lock
 include Pipfile
 graft src
+include tests/*.py

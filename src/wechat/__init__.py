@@ -4,6 +4,7 @@
 
 from .__version__ import __version__
 from .exceptions import RequestException
+from .auth import web_auth
 
 import logging
 

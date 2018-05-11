@@ -4,7 +4,7 @@
 import pytest
 
 from wechat.result import build_from_response
-from wechat.auth import OuthApi, get_mp_access_token
+from wechat.auth import MpOuthApi, get_mp_access_token
 
 
 @pytest.mark.usefixtures('response_builder')
@@ -17,7 +17,7 @@ class TestAuth:
             )
         )
         mocker.patch.object(
-            OuthApi,
+            MpOuthApi,
             '_execute_request',
             patched_request_execute
         )
@@ -41,11 +41,11 @@ class TestAuth:
             )
         )
         mocker.patch.object(
-            OuthApi,
+            MpOuthApi,
             '_execute_request',
             patched_request_execute
         )
-        mocker.spy(OuthApi, '_execute_request')
+        mocker.spy(MpOuthApi, '_execute_request')
 
         result = get_mp_access_token(mp_appid, mp_secret)
 
@@ -53,7 +53,7 @@ class TestAuth:
         assert patched_request_execute.call_count == 2
 
     def test_auth_appid_secret_immutable(self, mp_appid, mp_secret):
-        outh = OuthApi(mp_appid, mp_secret)
+        outh = MpOuthApi(mp_appid, mp_secret)
 
         with pytest.raises(AttributeError):
             outh._appid = 'new appid'

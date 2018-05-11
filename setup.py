@@ -8,7 +8,7 @@ import sys
 from setuptools import find_packages, setup
 
 DESCRIPTION = 'so eazy to interact with wechat api'
-URL = 'https://github.com/chuter/wechat'
+URL = 'https://github.com/chuter/wechat-requests'
 EMAIL = 'topgun.chuter@gmail.com'
 AUTHOR = 'chuter'
 VERSION = None

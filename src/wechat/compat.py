@@ -25,6 +25,7 @@ if is_py2:
 
     range = xrange
     unicode = unicode
+    from urllib import quote as url_quote
 
 elif is_py3:
     if JSONDecodeError is None:
@@ -32,6 +33,7 @@ elif is_py3:
 
     range = range
     unicode = str
+    from urllib.parse import quote as url_quote
 
 
 from requests.compat import bytes, str

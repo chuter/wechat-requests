@@ -17,6 +17,7 @@ RETRY_STATUS_FORCELIST = frozenset([500, 502, 504])
 
 
 # auth
+OAUTH_HOST = 'open.weixin.qq.com'
 AUTH_EXPIRED_CODES = frozenset([40014, 41001, 42001])
 
 # pay
