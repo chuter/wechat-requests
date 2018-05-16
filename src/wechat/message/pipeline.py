@@ -50,7 +50,10 @@ class Pipeline(object):
             else:
                 if result is not None:
                     context.set('handle_result', result)
-                    break
+                    context.set('handler', handler)
+
+                    if not context.should_continue:
+                        break
 
         # post process
         self._post_process(message, context)

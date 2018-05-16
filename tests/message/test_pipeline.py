@@ -51,6 +51,13 @@ def fake_handlers(count, return_at):
     return _handlers
 
 
+class FakeContinueHandler(object):
+
+    def handle(self, messsage, context):
+        context.set('should_continue', True)
+        return 'continue'
+
+
 class TestPipeline:
 
     def test_none_handlers(self, received_message_str):
@@ -136,5 +143,17 @@ class TestPipeline:
         with pytest.raises(MessageProcessException) as process_error:
             pipeline.handle(received_message_str)
             assert process_error.handler == postprocess_fail_handler
+
+        fake_handler.handle.assert_called_once()
+
+    def test_should_continue(self, mocker, received_message_str):
+        fake_handler = FakeHandler()
+        mocker.patch.object(
+            fake_handler,
+            'handle',
+            wraps=fake_handler.handle
+        )
+        pipeline = new_pipeline([FakeContinueHandler(), fake_handler])
+        pipeline.handle(received_message_str)
 
         fake_handler.handle.assert_called_once()

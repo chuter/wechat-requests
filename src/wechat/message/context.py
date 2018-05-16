@@ -24,6 +24,10 @@ class Context(dict):
     def handle_result(self):
         return self.get('handle_result', None)
 
+    @property
+    def should_continue(self):
+        return self.get('should_continue', False)
+
     def set(self, key, val):
         return self.__setitem__(key, val)
 
