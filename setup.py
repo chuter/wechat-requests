@@ -33,7 +33,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 src = os.path.join(here, 'src')
 
 if sys.argv[-1] == 'publish':
-    os.system('python setup.py sdist bdist_wheel')
+    os.system('python setup.py sdist')
     os.system('twine upload dist/*')
     sys.exit()
 
