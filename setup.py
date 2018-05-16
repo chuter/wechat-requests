@@ -15,6 +15,7 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
+    'six',
     'requests>=2.18.4',
     'lxml',
     'bs4',
