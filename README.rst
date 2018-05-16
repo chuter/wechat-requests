@@ -79,7 +79,7 @@ If visit api which need client cert:
 
 WebOauth
 """""""""""""""""""""""""
-See `WeChat DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140842>`_ for detail
+See `WeChat Oauth DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140842>`_ for detail
 
 
 .. code-block:: python
@@ -100,7 +100,7 @@ See `WeChat DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp14211408
 
 Message Hanlde Pipeline
 """""""""""""""""""""""""
-See `WeChat DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140453>`_ for detail
+See `WeChat Message DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140453>`_ for detail
 
 .. code-block:: python
 
@@ -115,7 +115,7 @@ See `WeChat DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp14211404
 
 Message Crypto
 """""""""""""""""""""""""
-See `WeChat DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1434696670>`_ for detail
+See `WeChat Crypt DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1434696670>`_ for detail
 
 .. code-block:: python
 

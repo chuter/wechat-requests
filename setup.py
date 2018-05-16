@@ -17,7 +17,8 @@ VERSION = None
 REQUIRED = [
     'requests>=2.18.4',
     'lxml',
-    'bs4'
+    'bs4',
+    'pycrypto'
 ]
 
 TEST_REQUIREMENTS = [

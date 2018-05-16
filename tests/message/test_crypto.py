@@ -110,14 +110,14 @@ class TestMsgCrypto:
                      nonce, receive_xml, crypted_message):
         crypto = build_message_crypto_for(token, aes_key, appid)
         signature = '1f4874576de4a1ad6e860ec3b4aa09158897b784'
-        message_bytes = crypto.decrypt(
+        message_str = crypto.decrypt(
             crypted_message,
             signature,
             timestamp,
             nonce
         )
 
-        assert message_bytes == receive_xml
+        assert message_str.encode('utf-8') == receive_xml
 
     def test_decrypt_with_invalid_signature(self, token, aes_key, timestamp,
                                             nonce, appid, crypted_message):

@@ -19,14 +19,10 @@ import socket
 from bs4 import BeautifulSoup
 
 from wechat.utils import serialize_dict_to_xml
-from wechat.compat import unicode, str
+from wechat.compat import unicode, str, is_py3
 from .exceptions import (SignatureError, InvalidAESKeyError, EncryptError,
                          ReceiveMsgFormatError, InvalidSignature,
                          DecryptError, InvalidAppid)
-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 
 __all__ = ['build_message_crypto_for']
@@ -50,11 +46,15 @@ class PKCS7Encoder(object):
             amount_to_pad = PKCS7Encoder._BLODK_SIZE
 
         pad = chr(amount_to_pad)
-        return text + pad * amount_to_pad
+        return bytes(text + bytearray(pad * amount_to_pad, encoding='utf-8'))
 
     @staticmethod
     def decode(encoded):
-        pad = ord(encoded[-1])
+        if is_py3:
+            pad = encoded[-1]
+        else:
+            pad = ord(encoded[-1])
+
         if pad < 1 or pad > PKCS7Encoder._BLODK_SIZE:
             return encoded
         else:
@@ -79,11 +79,15 @@ def _sign(token, timestamp, nonce, encrypt):
 
     """
 
-    try:
-        sortlist = [token, timestamp, nonce, encrypt]
-        sortlist.sort()
+    sortlist = []
+    for field in [token, timestamp, nonce, encrypt]:
+        if type(field) == unicode:
+            field = field.encode('utf-8')
+        sortlist.append(field)
+    sortlist.sort()
 
-        return hashlib.sha1(''.join(sortlist)).hexdigest()
+    try:
+        return hashlib.sha1(b''.join(sortlist)).hexdigest()
     except Exception as error:
         raise SignatureError(error)
 
@@ -111,8 +115,8 @@ class MsgCrypt(object):
         try:
             self.key = base64.b64decode(aes_key + '=')
             assert len(self.key) == 32
-        except:
-            raise InvalidAESKeyError()
+        except Exception as error:
+            raise InvalidAESKeyError(error)
 
         self.token = token
         self.appid = appid
@@ -127,7 +131,7 @@ class MsgCrypt(object):
           timestamp: 时间戳, 如果缺省使用当前时间
 
         Returns:
-          加密后的消息密文(utf-8编码bytes)
+          加密后的消息密文(unicode)
 
         Raises:
           SignatureError: 签名失败
@@ -168,7 +172,7 @@ class MsgCrypt(object):
           nonce: 随机串(包含在请求URL参数中)
 
         Returns:
-          消息原文(utf-8编码字节序列)
+          消息原文(unicode)
 
         Raises:
           ReceiveWXMsgFormatError: 收到的微信消息格式错误
@@ -237,7 +241,7 @@ class MsgCrypt(object):
           text: 密文
 
         Returns:
-          原文
+          原文(unicode)
 
         Raises:
           DecryptError: 解密失败
@@ -265,10 +269,10 @@ class MsgCrypt(object):
         except Exception as error:
             raise DecryptError(error)
         else:
-            if from_appid != self.appid:
+            if from_appid.decode(self._ENCODING) != self.appid:
                 raise InvalidAppid('{} != {}'.format(from_appid, self.appid))
 
-            return xml_content
+            return xml_content.decode(self._ENCODING)
 
     def _create_random_str(self):
         random_chars = random.sample(
