@@ -58,3 +58,25 @@ class TestSign:
     def test_with_invalid_signtype(self, signkey, sign_params):
         with pytest.raises(ValueError):
             sign.sign_for_pay(signkey, sign_type='invalid', **sign_params)
+
+    def test_sign_for_jsapi(self):
+        ret = sign.sign_for_jsapi(
+            'sM4AOVdWfPE4DxkXGEs8VMCPGGVi4C3VM0P37wVUCFvkVAy_90u5h9nbSlYy3-Sl-HhTdfl2fzFy1AOcHKP7qg', # noqa
+            'https://github.com/chuter/wechat-requests',
+            nonce='KkXtuN0j0nsaJtH',
+            timestamp=1526486834
+        )
+
+        assert ret['signature'] == 'ca92770171ac2afff6a247951b5e69a217cf34ff'
+        assert ret['nonceStr'] == 'KkXtuN0j0nsaJtH'
+        assert ret['timestamp'] == 1526486834
+        assert ret['url'] == 'https://github.com/chuter/wechat-requests'
+
+    def test_sign_with_defaults(self):
+        ret = sign.sign_for_jsapi(
+            'sM4AOVdWfPE4DxkXGEs8VMCPGGVi4C3VM0P37wVUCFvkVAy_90u5h9nbSlYy3-Sl-HhTdfl2fzFy1AOcHKP7qg', # noqa
+            'https://github.com/chuter/wechat-requests',
+        )
+
+        assert len(ret['nonceStr']) == 16
+        assert ret['timestamp'] is not None

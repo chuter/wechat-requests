@@ -181,8 +181,6 @@ coming soon...
 TODO
 ------------------------
 
-* web oauth surpport
 * wechat/wxpay third party platformcomponent api surpport
-* wechat message processing pipeline
 
 **will published in two weeks**

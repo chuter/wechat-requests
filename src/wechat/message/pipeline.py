@@ -31,7 +31,7 @@ class Pipeline(object):
 
         # init context
         context = Context.new(**kwargs)
-        context.defaults(message=message)
+        context.defaults(message=message, raw_message=raw_message)
 
         # pre process
         self._pre_process(message, context)

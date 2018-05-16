@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
+import time
 import hmac
 import random
 import string
@@ -11,7 +12,7 @@ from . import settings
 from .compat import str, range, unicode
 
 
-__all__ = ['random_nonce_str', 'sign_for_pay']
+__all__ = ['random_nonce_str', 'sign_for_pay', 'sign_for_jsapi']
 
 
 def random_nonce_str(length):
@@ -69,3 +70,27 @@ def sign_for_pay(sign_key, **kwargs):
             msg=sign_bytes,
             digestmod=hashlib.sha256
         ).hexdigest().upper()
+
+
+def sign_for_jsapi(jsapi_ticket, url, nonce=None, timestamp=None):
+    if nonce is None:
+        nonce = random_nonce_str(16)
+
+    if timestamp is None:
+        timestamp = int(time.time())
+
+    _dict = {
+        'nonceStr': nonce,
+        'jsapi_ticket': jsapi_ticket,
+        'timestamp': timestamp,
+        'url': url
+    }
+    tosign_str = '&'.join(
+        ['%s=%s' % (key.lower(), _dict[key]) for key in sorted(_dict)]
+    )
+
+    if type(tosign_str) == unicode:
+        tosign_str = tosign_str.encode('utf-8')
+
+    _dict['signature'] = hashlib.sha1(tosign_str).hexdigest()
+    return _dict
