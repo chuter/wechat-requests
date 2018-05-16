@@ -36,4 +36,4 @@ elif is_py3:
     from urllib.parse import quote as url_quote
 
 
-from requests.compat import bytes, str
+from requests.compat import bytes, str, basestring

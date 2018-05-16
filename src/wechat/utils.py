@@ -7,7 +7,7 @@ from .compat import json, str, bytes
 from .__version__ import __version__, __name__
 
 
-__all__ = ['build_user_agent']
+__all__ = ['build_user_agent', 'serialize_dict_to_xml']
 
 
 _USER_AGENT = None

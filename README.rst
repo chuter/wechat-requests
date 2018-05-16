@@ -77,6 +77,68 @@ If visit api which need client cert:
     u'2008450740201411110000174436'
 
 
+WebOauth
+"""""""""""""""""""""""""
+See `WeChat DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140842>`_ for detail
+
+
+.. code-block:: python
+
+    >>>from wechat import web_auth
+    >>>web_auth.build_authgrant_url('APPID', 'http://redirect_to')
+    u'https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect'
+    >>>result = web_auth.get_access_token('APPID', 'SECRET', 'CODE')
+    >>>result.access_token
+    u'ACCESS_TOKEN'
+    >>>user_result = web_auth.get_user_info('OPENID', result.access_token)
+    >>>user_result.unionid
+    u'o6_bmasdasdsad6_2sgVt7hMZOPfL'
+    >>>refresh_result = web_auth.refresh_access_token('APPID', result.refresh_token)
+    >>>refresh_result.refresh_token
+    u'REFRESH_TOKEN'
+
+
+Message Hanlde Pipeline
+"""""""""""""""""""""""""
+See `WeChat DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140453>`_ for detail
+
+.. code-block:: python
+
+    >>>from wechat.message import new_pipeline
+    >>>message_pipeline = new_pipeline([handler_instance, 'your.handler.path'])
+    >>>reply_message_bytes = message_pipeline.handle('receive xml message')
+    >>>from wechat.message import XMLMessageBuilder
+    >>>reply_message = XMLMessageBuilder.parse(reply_message_bytes)
+    >>>reply_message.to_openid
+    u'fromUser'
+
+
+Message Crypto
+"""""""""""""""""""""""""
+See `WeChat DOC <https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1434696670>`_ for detail
+
+.. code-block:: python
+
+    >>>from wechat.message import build_message_crypto_for
+    >>>crypto = build_message_crypto_for('TOKEN', 'AES_KEY', 'APPID')
+    >>>crypto.encrypt('MESSAGE_XML')
+    <xml>
+    <ToUserName><![CDATA[ToUserName]]></ToUserName>
+    <FromUserName><![CDATA[FromUserName]]></FromUserName>
+    <CreateTime>1409735669</CreateTime>
+    <Encrypt><![CDATA[uK+DOe54WRa31zp4IZ9wn2nmmyGW/Zp2lWg8s66DsPJDn4lq9Vl8ExMoUAYffJZhVNnMOay4ggAp3RGHteCKVU7krd8BUnoCcaOLyqbl36FxJWffWiOl6Xv4Xdb5fmQKnvG9swv4eXpTlH+L96SUa1C0dRofRC6tHJDHMNPuCun1R2UvQJRAcwoTIqwoHPMqJTehW3ttrohjeqaS7W9Nln3kufTmbwtyaYdwxUPP6agbc0KDGe3NzVGCQooAEmgOxQJW7kp2Rw6P7mLx2Mvr46bpiB6BFtDcZgnrto7/BqHzyCk50FPLl1BQDH2SgTkOzirV5XExAt1p+uuDSBo0Hw==]]></Encrypt>
+    </xml>
+    >>>crypto.decrypt('ENCRYPTED_MSG', 'SIGNATURE', 'timestamp', 'nonce')
+    <xml>
+    <ToUserName>ToUserName></ToUserName>
+    <FromUserName>FromUserName</FromUserName>
+    <CreateTime>1519387094</CreateTime>
+    <MsgType>text</MsgType>
+    <MsgId>-1</MsgId>
+    <Content>just a (汉字) test</Content>
+    </xml>
+
+
 RequestResult
 """""""""""""""""""""""""
 
