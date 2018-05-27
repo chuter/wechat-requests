@@ -1,7 +1,7 @@
 # -*- encoding: utf-8
 
-
 import re
+import time
 from copy import copy
 
 from .api import Api
@@ -10,7 +10,7 @@ from . import sign
 from . import utils
 
 
-__all__ = ['for_merchant']
+__all__ = ['for_merchant', 'build_jspay_params']
 
 """
 
@@ -208,3 +208,17 @@ def for_merchant(appid, mchid, signkey,
     """
 
     return Wxpay(appid, mchid, signkey, client_cert, client_key, **kwargs)
+
+
+def build_jspay_params(paysign_key, appid, prepay_id):
+    """build weixin JSApi.chooseWXPay params
+    """
+    _params = {
+        "nonceStr": sign.random_nonce_str(32),
+        "timeStamp": int(time.time()),
+        "package": 'prepay_id={}'.format(prepay_id),
+        "signType": "MD5",
+        "appId": appid
+    }
+    _params['paySign'] = sign.sign_for_pay(paysign_key, **_params)
+    return _params

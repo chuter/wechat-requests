@@ -74,3 +74,13 @@ class TestPay:
         soup = BeautifulSoup(send_body, 'xml')
         assert soup.appid.text == 'fake_app_id'
         assert soup.mch_id.text == 'fake_mchid'
+
+
+def test_build_jspay_params(pay_signkey, mp_appid):
+    params = pay.build_jspay_params(pay_signkey, mp_appid, 'dummy_prepayid')
+
+    assert len(params['nonceStr']) == 32
+    assert 'timeStamp' in params
+    assert params['signType'] == 'MD5'
+    assert params['appId'] == mp_appid
+    assert params['package'] == 'prepay_id=dummy_prepayid'

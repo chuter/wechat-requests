@@ -115,34 +115,22 @@ class XMLMessage(object):
         return self.type == MessageTypes.LINK
 
     def is_subscribe_event(self):
-        return all([
-            self.is_event(),
-            self.Event == MessageEventTypes.SUBSCRIBE
-        ])
+        return self.is_event() and self.Event == MessageEventTypes.SUBSCRIBE
 
     def is_unsubscribe_event(self):
-        return all([
-            self.is_event(),
-            self.Event == MessageEventTypes.UNSUBSCRIBE
-        ])
+        return self.is_event() and self.Event == MessageEventTypes.UNSUBSCRIBE
 
     def is_qrscene_subscribe_event(self):
-        return all([
-            self.is_subscribe_event(),
-            self.EventKey.startswith('qrscene_')
-        ])
+        if self.is_subscribe_event():
+            return self.EventKey.startswith('qrscene_')
+
+        return False
 
     def is_scan_event(self):
-        return all([
-            self.is_event(),
-            self.Event == MessageEventTypes.SCAN
-        ])
+        return self.is_event() and self.Event == MessageEventTypes.SCAN
 
     def is_click_event(self):
-        return all([
-            self.is_event(),
-            self.Event == MessageEventTypes.CLICK
-        ])
+        return self.is_event() and self.Event == MessageEventTypes.CLICK
 
     @property
     def id(self):
