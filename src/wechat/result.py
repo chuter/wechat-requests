@@ -115,7 +115,7 @@ def _build_from_xml(xml_text, response):
         if isinstance(k, bytes):
             k = k.decode(ENCODING)
 
-        _json[k] = tag.string
+        _json[k] = tag.text
 
     if u'return_code' in _json:
         if _json[u'return_code'] != RequestResult._XML_SUCCESS_CODE:
@@ -184,6 +184,8 @@ def build_from(from_x, response=None):
 
 
 def build_from_response(response):
+    response.encoding = ENCODING
+
     if response.status_code >= 300 or response.status_code < 200:
         errcode = response.status_code
         errmsg = response.text
@@ -194,7 +196,7 @@ def build_from_response(response):
         return RequestErrorResult(error_json, response.text, response)
 
     try:
-        ret_json = response.json()
+        ret_json = response.json(encoding=ENCODING)
     except ValueError as json_error: # noqa
         logging.getLogger('wechat').warning('JSON parse error', exc_info=True)
         return build_from(response.text, response)
